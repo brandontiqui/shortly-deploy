@@ -2,7 +2,53 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+
+    // need to modify to include all js files
     concat: {
+      options: {
+        separator: ';',
+      },
+      dist: {
+        src: ['public/client/**/*.js'],
+        dest: 'public/dist/<%= pkg.name %>.js'
+      }
+    },
+
+    gitadd: {
+      task: {
+        options: {
+          force: true
+        },
+        files: {
+          src: 'shortly-deploy'
+        }
+      }
+    },
+
+    gitcommit: {
+      your_target: {
+        options: {
+          // cwd: 'shortly-deploy' // ?
+          force: true
+        },
+        files: [
+          {
+            src: 'shortly-deploy'
+            // expand: true
+            // cwd: 'shortly-deploy'
+          }
+        ]
+      }
+    },
+
+    gitpush: {
+      yourTarget: {
+        options: {
+          // Target-specific options go here.
+          remote: 'live',
+          branch: 'master'
+        }
+      }
     },
 
     mochaTest: {
@@ -21,6 +67,11 @@ module.exports = function(grunt) {
     },
 
     uglify: {
+      target: {
+        files: {
+          'public/dist/<%= pkg.name %>.min.js': ['public/dist/<%= pkg.name %>.js']
+        }
+      }
     },
 
     eslint: {
@@ -63,6 +114,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-nodemon');
+  grunt.loadNpmTasks('grunt-git');
 
   grunt.registerTask('server-dev', function (target) {
     grunt.task.run([ 'nodemon', 'watch' ]);
@@ -77,7 +129,11 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('build', [
+    'concat',
+    'uglify'
   ]);
+
+  grunt.registerTask('live', ['gitadd', 'gitcommit', 'gitpush']);
 
   grunt.registerTask('upload', function(n) {
     if (grunt.option('prod')) {
