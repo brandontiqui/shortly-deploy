@@ -1,17 +1,22 @@
- var mongoose = require('mongoose');
+var mongoose = require('mongoose');
 // var mongodb = require('mongodb');
-mongoose.connect('mongodb://localhost/test');
+//var connection = mongoose.connection;
+mongoose.connect('mongodb://localhost/shortly');
 
-var Cat = mongoose.model('Cat', { name: String });
+// connection.once('open', function() {
+//   console.log('database has opened');
+// });
 
-var kitty = new Cat({ name: 'Zildjian' });
-kitty.save(function (err) {
-  if (err) {
-    console.log(err);
-  } else {
-    console.log(kitty);
-  }
-});
+// var Cat = mongoose.model('Cat', { name: String });
+
+// var kitty = new Cat({ name: 'Zildjian' });
+// kitty.save(function (err) {
+//   if (err) {
+//     console.log(err);
+//   } else {
+//     console.log(kitty);
+//   }
+// });
 
 var Schema = mongoose.Schema;
 
@@ -25,19 +30,37 @@ var linkSchema = new Schema({
 });
 
 var userSchema = new Schema({
-  title:  String,
-  author: String,
-  body:   String,
-  comments: [{ body: String, date: Date }],
-  date: { type: Date, default: Date.now },
-  hidden: Boolean,
-  meta: {
-    votes: Number,
-    favs:  Number
+  username: String,
+  password: String,
+  time : { type: Date, default: Date.now }
+});
+
+var Links = mongoose.model('Links', linkSchema);
+var Users = mongoose.model('Users', userSchema);
+
+var newUser = new Users({ username: 'test', password: 'test1'});
+var link = new Links({ url: 'test', baseUrl: 'test2', code: 'test3', title: 'test4', visits: 5});
+
+link.save(function(err) {
+  if (err) {
+    console.log(err);
+  } else {
+    console.log(link);
+    mongoose.connection.close();
   }
 });
 
-// mongoose.connection.close();
+// newUser2.save(function(err) {
+//   if (err) {
+//     console.log(err);
+//   } else {
+//     console.log(newUser2);
+//   }
+//   mongoose.connection.close();
+// });
+
+//mongoose.connection.close();
+
 // var MongoClient = require('mongodb').MongoClient;
 // var assert = require('assert');
  

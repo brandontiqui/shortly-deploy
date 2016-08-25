@@ -6,7 +6,7 @@ module.exports = function(grunt) {
     // need to modify to include all js files
     concat: {
       options: {
-        separator: ';',
+        separator: ';\n',
       },
       dist: {
         src: ['public/client/**/*.js'],
