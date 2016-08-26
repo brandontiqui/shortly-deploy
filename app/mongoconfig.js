@@ -39,16 +39,35 @@ var Links = mongoose.model('Links', linkSchema);
 var Users = mongoose.model('Users', userSchema);
 
 var newUser = new Users({ username: 'test', password: 'test1'});
+
+
 var link = new Links({ url: 'test', baseUrl: 'test2', code: 'test3', title: 'test4', visits: 5});
 
-link.save(function(err) {
-  if (err) {
-    console.log(err);
-  } else {
-    console.log(link);
-    mongoose.connection.close();
-  }
-});
+// link.save(function(err) {
+//   if (err) {
+//     console.log(err);
+//   } else {
+//     console.log(link);
+//     //mongoose.connection.close();
+//   }
+// });
+
+// Users.findOne({username: 'test'}, function(err, doc) {
+//   if (err) {
+//     console.log('error! it is', err);
+//   } else {
+//     console.log('value for doc is', doc);
+//     mongoose.connection.close();
+//   }
+// });
+
+module.exports.Links = Links;
+module.exports.Users = Users;
+module.exports.connections = mongoose.connection;
+//module.exports.UsersSchema = Users;
+
+
+
 
 // newUser2.save(function(err) {
 //   if (err) {
